@@ -31,6 +31,7 @@ def newUser():
     return "OK"
 
 
+#all
 @app.route("/all", methods=['GET'])
 def getDB():
     try:
@@ -50,19 +51,66 @@ def getDB():
 
     return jsonify(
         {
-            'users': all_users
+            'events': all_users
         }
     )
 
-@app.route("/events", methods=['GET'])
+@app.route("/events")
 def getList():
-    return jsonify(cursor.execute("select id,name,data from events"))
+    dataOut=0
+    try:
+        cursor.execute("SELECT id,data,name FROM events")
+        rows = cursor.fetchall()
+        all_users = []
+        for row in rows:
+            rw={}
+            rw['id']=row[0]
+            rw['date']=row[1]
+            rw['name']=row[2]
+            all_users.append(rw)
+    except:
+        cursor.execute("ROLLBACK")
+        conn.commit()
 
-@app.route("/event", methods=['POST'])
-def getEvent():
-    id = request.get_gson(force=True)['id']
-    return jsonify(cursor.execute("select * from events where id = " + str(id)))
+    return jsonify(all_users)
 
+@app.route("/event/<id>", methods=['GET'])
+def getEvent(id):
+    jsn={}
+    id=str(id)
+
+
+
+
+    try:
+        print("in event",id)
+        data = str(id)
+        print('data got')
+        id=data['id']
+        print(id)
+
+
+        cursor.execute('SELECT * FROM events WHERE id=%s', (id,))
+        print('exec')
+
+        data = (cursor.fetchone())
+
+
+        print(data)
+        jsn['id']=data[0]
+        jsn['date']=data[1]
+        jsn['name']=data[2]
+        jsn['text']=data[3]
+
+
+    except:
+        cursor.execute("ROLLBACK")
+        print("exeption bl")
+
+    print(jsn)
+    return jsonify(jsn)
+
+#work
 @app.route("/")
 def start():
 

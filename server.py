@@ -1,3 +1,5 @@
+import traceback
+
 from flask import Flask, jsonify, request
 import psycopg2
 
@@ -10,7 +12,7 @@ conn = psycopg2.connect(
     "host='ec2-54-247-85-251.eu-west-1.compute.amazonaws.com'dbname='d8m4ltkkld2uie'user='dxkdifktnjbjpe'password='409b146b8f14513ee691d3a17f9918ca66623c1e97eff24f8ada5e2003360d7d'")
 cursor = conn.cursor()
 
-cursor.execute("CREATE TABLE if NOT EXISTS events (id INTEGER PRIMARY KEY ,data varchar, name varchar ,text varchar )")
+cursor.execute("CREATE TABLE if NOT EXISTS events (ID SERIAL PRIMARY KEY ,data varchar, name varchar ,text varchar )")
 conn.commit()
 
 @app.route("/newEvent", methods=['POST'])
@@ -32,7 +34,26 @@ def newUser():
 
 @app.route("/all", methods=['GET'])
 def getDB():
-    return jsonify(cursor.fetchall())
+    try:
+        cursor.execute("SELECT * FROM events")
+        rows = cursor.fetchall()
+        all_users = []
+        for row in rows:
+            all_users.append(row)
+
+    except Exception:
+        cursor.execute("ROLLBACK")
+        conn.commit()
+
+        print('Error:\n', traceback.format_exc())
+        print('---------------------------------')
+        all_users = 'error'
+
+    return jsonify(
+        {
+            'users': all_users
+        }
+    )
 
 @app.route("/events", methods=['GET'])
 def getList():
@@ -45,7 +66,12 @@ def getEvent():
 
 @app.route("/")
 def start():
+
+    cursor.execute(
+    "INSERT INTO EVENTS (data,name,text) VALUES ('12.05.2018','SOME EVENT','WQERXTCFGKVLUKDJYCKLILHKUTGHKDT')")
+    conn.commit()
+
     return "чейкате доки в беседе"
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug = True, port = 5000)

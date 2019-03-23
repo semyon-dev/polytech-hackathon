@@ -1,22 +1,34 @@
 import traceback
 import events
-import time
 import psycopg2
+import threading
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-conn = psycopg2.connect("host='ec2-54-247-85-251.eu-west-1.compute.amazonaws.com'dbname='d8m4ltkkld2uie'user"
-                        "='dxkdifktnjbjpe'password='409b146b8f14513ee691d3a17f9918ca66623c1e97eff24f8ada5e2003360d7d"
-                        "'")
+conn = psycopg2.connect( "host='ec2-54-247-85-251.eu-west-1.compute.amazonaws.com'dbname='d8m4ltkkld2uie'user='dxkdifktnjbjpe'password='409b146b8f14513ee691d3a17f9918ca66623c1e97eff24f8ada5e2003360d7d'")
 cursor = conn.cursor()
 
-cursor.execute("DROP TABLE events")
+# cursor.execute("DROP TABLE comments")
+# conn.commit()
 
-cursor.execute(
-    "CREATE TABLE if NOT EXISTS events (ID SERIAL PRIMARY KEY , title varchar, date varchar , about varchar, picture varchar, yes integer, no integer)")
+cursor.execute("CREATE TABLE if NOT EXISTS events (ID integer, title varchar, date varchar , about varchar, picture varchar, yes integer, no integer)")
 conn.commit()
 
+def f(f_stop):
+    p = (events.GetAnnouncements())
+    print(p)
+    n = 0
+
+    for i in p:
+        n+=1
+        params = (n, i["title"], i["date"], i["about"], i["picture"], 0, 0)
+        cursor.execute("INSERT INTO events VALUES (%s, %s, %s, %s, %s, %s, %s)", params)
+
+    conn.commit()
+    if not f_stop.is_set():
+        # call f() again in 100 seconds
+        threading.Timer(100, f, [f_stop]).start()
 
 def newEvent(title, date, about, picture):
     params = (title, date, about, picture, 0, 0)
@@ -84,21 +96,14 @@ def getEvent(id):
 
 @app.route("/")
 def start():
-    cursor.execute(
-        "INSERT INTO EVENTS (data,name,text) VALUES ('12.05.2018','SOME EVENT','WQERXTCFGKVLUKDJYCKLILHKUTGHKDT')")
-    conn.commit()
+    f_stop = threading.Event()
+    # start calling f now and every 60 sec thereafter
+    f(f_stop)
 
-    return jsonify("чейкате доки в беседе")
+    return "OK"
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-
-    def executeSomething():
-        print(events.GetAnnouncements())
-        time.sleep(10)
-
-    while True:
-        executeSomething()
 
 # НЕ ЮЗАЕМ, ГОВНОКОД:
 

@@ -5,12 +5,11 @@ import psycopg2
 
 app = Flask(__name__)
 
-# save data with deleting
-# json.dump(users,open("data/users.json","w"))
-
 conn = psycopg2.connect(
     "host='ec2-54-247-85-251.eu-west-1.compute.amazonaws.com'dbname='d8m4ltkkld2uie'user='dxkdifktnjbjpe'password='409b146b8f14513ee691d3a17f9918ca66623c1e97eff24f8ada5e2003360d7d'")
 cursor = conn.cursor()
+
+# cursor.execute("DROP TABLE events")
 
 cursor.execute("CREATE TABLE if NOT EXISTS events (ID SERIAL PRIMARY KEY ,data varchar, name varchar ,text varchar )")
 conn.commit()

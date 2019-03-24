@@ -61,7 +61,7 @@ def vote():
     yes = 0
     no = 0
 
-    cursor.execute("SELECT * FROM events")
+    cursor.execute("SELECT * FROM events WHERE id=%s", id)
     rows = cursor.fetchall()
     for row in rows:
         yes = int(row[5])

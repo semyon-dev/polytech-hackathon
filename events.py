@@ -146,7 +146,6 @@ def cleanimg(line):
     result = ""
     p = 0
     res = []
-    not_skip = True
     for i in list(line):
         p += 1
         res.append(i.attrs['src'])

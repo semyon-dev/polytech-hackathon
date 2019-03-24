@@ -28,7 +28,7 @@ def f(f_stop):
             title = (cursor.fetchone())
 
             if title is None:
-                cursor.execute("INSERT INTO events VALUES (%s, %s, %s, %s, %s, %s, %s) ", [n, i["title"], i["date"], i["about"], i["picture"], 0, 0])
+                cursor.execute("INSERT INTO events VALUES (%s, %s, %s, %s, %s, %s, %s) ", [str(n), i["title"], i["date"], i["about"], i["picture"], 0, 0])
                 conn.commit()
 
         except Exception:
@@ -125,7 +125,7 @@ def Events():
         rows = cursor.fetchall()
         for row in rows:
             rw = {}
-            rw['id'] = row[0]
+            rw['id'] = str(row[0])
             rw['title'] = row[1]
             rw['date'] = row[2]
             rw['about'] = row[3]

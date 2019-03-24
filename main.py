@@ -14,9 +14,6 @@ cursor = conn.cursor()
 # cursor.execute("DROP TABLE events")
 # conn.commit()
 
-# cursor.execute("CREATE TABLE if NOT EXISTS tusers (ID SERIALIZABLE PRIMARY KEY, tid integer , subc boolean)")
-# conn.commit()
-
 cursor.execute("CREATE TABLE if NOT EXISTS events (ID varchar, title varchar, date varchar , about varchar, picture varchar, yes varchar , no varchar)")
 conn.commit()
 
@@ -29,11 +26,8 @@ def f(f_stop):
             n += 1
             cursor.execute('SELECT * FROM events WHERE title=%s', (i["title"],))
             title = (cursor.fetchone())
-            print(n)
-            print(title)
 
             if title is None:
-                print("NOOONE")
                 cursor.execute("INSERT INTO events VALUES (%s, %s, %s, %s, %s, %s, %s) ", [n, i["title"], i["date"], i["about"], i["picture"], 0, 0])
                 conn.commit()
 
@@ -90,9 +84,6 @@ def comment(id,name,date,text):
     cursor.execute("INSERT INTO comments (id,name,date,text) VALUES(%s,%s,%s,%s)",(int(id),name,date,text))
     conn.commit()
 
-#comment('2','hoki','14.04.1234','ervyiguohuih')
-
-
 #добавление нового комментария к записи используя id записи
 @app.route("/comment",methods=['POST'])
 def comm():
@@ -105,9 +96,26 @@ def comm():
 @app.route("/comments/<id>")
 def comms(id):
     cursor.execute("SELECT * FROM comments WHERE id = %s",(int(id),))
-    data=cursor.fetchall()
+    data = cursor.fetchall()
     return jsonify(data)
 
+@app.route("/event/<id>")
+def Event(id):
+
+    cursor.execute("SELECT * FROM events WHERE id = %s", (id,))
+    row = cursor.fetchone()
+    print(row)
+    rw={}
+
+    rw['id'] = row[0]
+    rw['title'] = row[1]
+    rw['date'] = row[2]
+    rw['about'] = row[3]
+    rw['picture'] = row[4]
+    rw['yes'] = row[5]
+    rw['no'] = row[6]
+
+    return jsonify(rw)
 
 @app.route("/events")
 def Events():
@@ -145,68 +153,3 @@ def start():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-
-
-
-# НЕ ЮЗАЕМ:
-
-# def newEvent(title, date, about, picture):
-#     params = (title, date, about, picture, 0, 0)
-#     cursor.execute("INSERT INTO events VALUES (%s, %s, %s, %s, %s, %s)", params)
-#     conn.commit()
-#     return jsonify("OK")
-
-# @app.route("/all", methods=['GET'])
-# def getDB():
-#     try:
-#         cursor.execute("SELECT * FROM events")
-#         rows = cursor.fetchall()
-#         all = []
-#         for row in rows:
-#             all.append(row)
-#
-#     except Exception:
-#         cursor.execute("ROLLBACK")
-#         conn.commit()
-#
-#         print('Error:\n', traceback.format_exc())
-#         print('---------------------------------')
-#         all = 'error'
-#
-#     return jsonify(
-#         {
-#             'events': all
-#         }
-#     )
-
-
-# @app.route("/event/<id>", methods=['GET'])
-# def getEvent(id):
-#     jsn = {}
-#     id = str(id)
-#     print("in event", id)
-#     data = str(id)
-#     print('data got')
-#     id = data[0]
-#     print(id)
-#
-#     try:
-#
-#         cursor.execute('SELECT * FROM events WHERE id=%s', (id,))
-#         print('exec')
-#         data = (cursor.fetchone())
-#         print(data)
-#
-#         jsn['id'] = data[0]
-#         jsn['date'] = data[1]
-#         jsn['name'] = data[2]
-#         jsn['text'] = data[3]
-#
-#     except Exception:
-#
-#         cursor.execute("ROLLBACK")
-#         conn.commit()
-#         print('Error:\n', traceback.format_exc())
-#         print('---------------------------------')
-
-    # return jsonify(jsn)

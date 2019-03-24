@@ -52,6 +52,8 @@ def f(f_stop):
 @app.route("/vote", methods=['POST'])
 def vote():
 
+    y = 0
+
     data = request.get_json(force=True)
     id = data['id']
     result = data['result']
@@ -82,6 +84,65 @@ def vote():
         print('---------------------------------')
 
     return jsonify("OK")
+
+@app.route("/vote/<id>/<result>", methods=['GET'])
+def vote(id,result):
+
+    print(id, result)
+    data = request.get_json(force=True)
+    id = data['id']
+    result = data['result']
+
+    yes = 0
+    no = 0
+
+    cursor.execute("SELECT * FROM events")
+    rows = cursor.fetchall()
+    for row in rows:
+        yes = int(row[5])
+        no = int(row[6])
+
+    if result == "yes":
+        y = 1 + yes
+    else:
+        y = 1 + no
+
+    try:
+        cursor.execute("UPDATE events SET " + result + " = %s WHERE id = %s", (y, id))
+        conn.commit()
+
+    except Exception:
+
+        cursor.execute("ROLLBACK")
+        conn.commit()
+        print('Error:\n', traceback.format_exc())
+        print('---------------------------------')
+
+    return jsonify("OK")
+
+
+def comment(id,name,date,text):
+    cursor.execute("INSERT INTO comments (id,name,date,text) VALUES(%s,%s,%s,%s)",(int(id),name,date,text))
+    conn.commit()
+
+#comment('2','hoki','14.04.1234','ervyiguohuih')
+
+
+#добавление нового комментария к записи используя id записи
+@app.route("/comment",methods=['POST'])
+def comm():
+    data = request.get_json(force=True)
+    comment(data['id'],data['name'],data['date'],data['text'])
+
+    return jsonify({'status':'ok'})
+
+#get all comments to this events using id of event
+@app.route("/comments/<id>")
+def comms(id):
+    cursor.execute("SELECT * FROM comments WHERE id = %s",(int(id),))
+    data=cursor.fetchall()
+    return jsonify(data)
+
 
 @app.route("/events")
 def Events():

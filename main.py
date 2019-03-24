@@ -85,41 +85,6 @@ def vote():
 
     return jsonify("OK")
 
-@app.route("/vote/<id>/<result>", methods=['GET'])
-def vote(id,result):
-
-    print(id, result)
-    data = request.get_json(force=True)
-    id = data['id']
-    result = data['result']
-
-    yes = 0
-    no = 0
-
-    cursor.execute("SELECT * FROM events")
-    rows = cursor.fetchall()
-    for row in rows:
-        yes = int(row[5])
-        no = int(row[6])
-
-    if result == "yes":
-        y = 1 + yes
-    else:
-        y = 1 + no
-
-    try:
-        cursor.execute("UPDATE events SET " + result + " = %s WHERE id = %s", (y, id))
-        conn.commit()
-
-    except Exception:
-
-        cursor.execute("ROLLBACK")
-        conn.commit()
-        print('Error:\n', traceback.format_exc())
-        print('---------------------------------')
-
-    return jsonify("OK")
-
 
 def comment(id,name,date,text):
     cursor.execute("INSERT INTO comments (id,name,date,text) VALUES(%s,%s,%s,%s)",(int(id),name,date,text))

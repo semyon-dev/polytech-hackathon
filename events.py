@@ -10,10 +10,16 @@ newsimg = []
 def ParseCode(fnews):
     for i in range(len(fnews)-1):
         if (fnews[i] != "" and fnews[i] != ", "):
-            newstitles.append(fnews[i])
+            a = fnews[i].replace("'", "")
+            a = a.replace("\'", "")
+            a = a.replace(", ", "")
+            a = a.replace(" ,", "")
+            a = a.replace("\'", "")
+            a = a.strip('\" ')
+
+            newstitles.append(a)
 
     newstitles.pop(0)
-
 
 def GetTitles(bs):
     bs2 = str(bs.findAll("a", "event-header"))
@@ -79,11 +85,13 @@ def cleanabout(string_line):
                 not_skip = True
     return res
 
-
 def ParseCodeAbout(fnews):
     for i in range(len(fnews)-1):
         if (fnews[i] != "" and fnews[i] != ", "):
-            newsabout.append(fnews[i])
+            a = fnews[i].replace(",", "")
+            a = a.replace("'", "")
+            print(a)
+            newsabout.append(a)
 
 
 def GetDates(bs):

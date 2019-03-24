@@ -157,7 +157,7 @@ def cleanimg(line):
 
 def ParseCodeImg(fnews):
     for i in range(len(fnews)-1):
-            newsimg.append(fnews[i])
+            newsimg.append("https://www.spbstu.ru" + fnews[i])
 
 
 def GetAnnouncements():

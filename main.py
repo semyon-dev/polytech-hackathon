@@ -2,7 +2,7 @@ import traceback
 import events
 import psycopg2
 import threading
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -47,22 +47,30 @@ def f(f_stop):
         # call f() again in 100 seconds
         threading.Timer(100, f, [f_stop]).start()
 
-@app.route("/vote")
+@app.route("/vote", methods=['POST'])
 def vote():
+
+    data = request.get_json(force=True)
+    id = data['id']
+    result = data['result']
+
+    yes = 0
+    no = 0
+
+    cursor.execute("SELECT * FROM events")
+    rows = cursor.fetchall()
+    for row in rows:
+        yes = int(row[5])
+        no = int(row[6])
+
+    if result == "yes":
+        y = 1 + yes
+    else:
+        y = 1 + no
+
     try:
-        cursor.execute("SELECT * FROM events")
-        rows = cursor.fetchall()
-        events = []
-        for row in rows:
-            rw = {}
-            rw['id'] = row[0]
-            rw['title'] = row[1]
-            rw['date'] = row[2]
-            rw['about'] = row[3]
-            rw['picture'] = row[4]
-            rw['yes'] = row[5]
-            rw['no'] = row[6]
-            events.append(rw)
+        cursor.execute("UPDATE events SET " + result + " = %s WHERE id = %s", (y, id))
+        conn.commit()
 
     except Exception:
 
@@ -71,7 +79,7 @@ def vote():
         print('Error:\n', traceback.format_exc())
         print('---------------------------------')
 
-    return jsonify(events)
+    return jsonify("OK")
 
 @app.route("/events")
 def Events():

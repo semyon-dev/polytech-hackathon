@@ -1,13 +1,12 @@
-import telebot
-import time
-from datetime import datetime
-import os
-import re
 import json
-import requests
+import traceback
+from datetime import datetime
 import psycopg2
+import requests
+import telebot
+import configs
 
-bot = telebot.TeleBot("831919639:AAFW57f8W5MGXGi1RkPkzg3KgBWtT2G7qQQ")
+bot = telebot.TeleBot(configs.token)
 print("Get me:\n", bot.get_me(), "==========")
 def log(message, answer):
     print("----------")
@@ -21,9 +20,7 @@ def log(message, answer):
         answer))
 
 def adduser(uid):
-    bconn = psycopg2.connect(host='ec2-54-247-85-251.eu-west-1.compute.amazonaws.com', user="dxkdifktnjbjpe",
-                            password="409b146b8f14513ee691d3a17f9918ca66623c1e97eff24f8ada5e2003360d7d",
-                            dbname="d8m4ltkkld2uie")
+    bconn = psycopg2.connect(configs.database)
     bcursor = bconn.cursor()
 
     bcursor.execute("CREATE TABLE if NOT EXISTS tusers (tid integer , subc integer)")

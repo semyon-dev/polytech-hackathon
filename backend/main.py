@@ -4,11 +4,12 @@ import psycopg2
 import threading
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import configs
 
 app = Flask(__name__)
 CORS(app)
 
-conn = psycopg2.connect( "host='ec2-54-247-85-251.eu-west-1.compute.amazonaws.com'dbname='d8m4ltkkld2uie'user='dxkdifktnjbjpe'password='409b146b8f14513ee691d3a17f9918ca66623c1e97eff24f8ada5e2003360d7d'")
+conn = psycopg2.connect(configs.database)
 cursor = conn.cursor()
 
 # cursor.execute("DROP TABLE events")

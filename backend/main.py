@@ -1,5 +1,5 @@
 import traceback
-import events
+from backend import events
 import psycopg2
 import threading
 from flask import Flask, jsonify, request

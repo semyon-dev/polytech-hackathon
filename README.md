@@ -12,3 +12,6 @@
 ### [Презентация](https://docs.google.com/presentation/d/1mD_L1guzD8rmoGX5NNQ76wnzL8-ZGq-S8iO4cF_P5Yw/edit?usp=sharing)
 
 <img src="https://github.com/SemyonNovikov/politex-digitalguys/blob/master/tech.png" alt="drawing" width="650"/>
+
+### License
+Project is distributed under MIT License

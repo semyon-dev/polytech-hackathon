@@ -11,3 +11,5 @@
 * Vue JS
 * PostgreSQL
 * Heroku
+
+#### [Презентация](https://docs.google.com/presentation/d/1mD_L1guzD8rmoGX5NNQ76wnzL8-ZGq-S8iO4cF_P5Yw/edit?usp=sharing)

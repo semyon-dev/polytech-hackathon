@@ -1,7 +1,7 @@
 ## Проект (решение кейса) для хакатона от Политеха и Digital Banana - 2019
 
 & <img src="https://github.com/SemyonNovikov/politex-digitalguys/blob/master/politex.png" alt="drawing" width="60"/>
- &  <img src="https://github.com/SemyonNovikov/politex-digitalguys/blob/master/politex.png" alt="drawing" width="60"/>
+ &  <img src="https://github.com/SemyonNovikov/politex-digitalguys/blob/master/digital_banana.jpg" alt="drawing" width="60"/>
  
 ### Создатели (команда - Digital Guys)
 * https://github.com/SemyonNovikov

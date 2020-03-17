@@ -4,7 +4,7 @@
  . <img src="https://github.com/semyon-dev/politex-digitalguys/blob/master/politex.png" alt="drawing" width="60"/>
  &  <img src="https://github.com/semyon-dev/politex-digitalguys/blob/master/digital_banana.jpg" alt="drawing" width="60"/>
  
-Мы доносим новости в более удобном формате, также можно оставлять голос (идешь или нет) для сбора статистики, опросы с подбором мероприятия по итогам его прохождения.
+Мы доносим новости в более удобном формате (сайт и бот), также можно оставлять голос (идешь или нет) для сбора статистики, опросы с подбором мероприятия по итогам его прохождения.
  
 ## Создатели (команда Digital Guys)
 * https://github.com/semyon-dev

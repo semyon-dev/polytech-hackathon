@@ -1,4 +1,5 @@
-## Проект (решение кейса), сделанный на хакатоне от Политеха и Digital Banana (2019)
+## polytech-hackathon
+Проект (решение кейса), сделанный на хакатоне от Политеха и Digital Banana (2019). 2 место + спец приз от Dell.
 
  . <img src="https://github.com/semyon-dev/politex-digitalguys/blob/master/politex.png" alt="drawing" width="60"/>
  &  <img src="https://github.com/semyon-dev/politex-digitalguys/blob/master/digital_banana.jpg" alt="drawing" width="60"/>
